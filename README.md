@@ -11,3 +11,4 @@ Plan atm is:
 3. Keep adding more games
 4. Wario-ware-style remixed mode, where games change in sequence 
 5. Maybe scoreboard
+
