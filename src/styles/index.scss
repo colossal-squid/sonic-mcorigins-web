@@ -14,3 +14,8 @@ body {
 canvas {
   margin: auto;
 }
+
+.lcd-screen {
+  position: absolute;
+  left: calc(50% - 280px);
+}
