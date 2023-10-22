@@ -2,8 +2,8 @@ const FPS = 2;
 const Sprite = (id) => {
   const sprite = document.getElementById(id);
   return {
-    show: () => (sprite.style = `display: block`),
-    hide: () => (sprite.style = `display: none`),
+    show: () => (sprite.style = `opacity: 1`),
+    hide: () => (sprite.style = `opacity: 0.1`),
   };
 };
 

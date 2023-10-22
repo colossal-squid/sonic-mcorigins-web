@@ -10,8 +10,8 @@ function _update(e, v) {
     controlsState.right = !v;
   }
   if (e.key === " ") {
-    controlsState.hands += 3;
-    controlsState.hands += constrain(controlsState.hands, 0, 3);
+    controlsState.hands += 2;
+    controlsState.hands += constrain(controlsState.hands, 0, 2);
   }
   if (e.key === "ArrowRight" || e.key === "D") {
     controlsState.right = v;
@@ -25,11 +25,12 @@ export function initControls() {
 export function clearControls() {
   controlsState.left = false;
   controlsState.right = false;
-  controlsState.hands = false;
+  controlsState.hands = constrain(controlsState.hands - 1, 0, 2);
 }
 
 function constrain(num, min, max) {
   if (num < min) return min;
   if (num > max) return max;
+
   return num;
 }
