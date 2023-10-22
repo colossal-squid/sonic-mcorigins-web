@@ -1,31 +1,13 @@
-# Webpack Frontend Starterkit
+# sonic-mcorigins-web
 
-A lightweight foundation for your next webpack based frontend project.
+Inspired by [https://github.com/Difegue/LCDonald](https://github.com/Difegue/LCDonald) this repo is an attempt to re-create some of LCD games playable in browser.
 
-### Installation
+The idea is to re-use resources from glorious [Sonic McOrigins Plus](https://www.youtube.com/watch?v=qde4EjUn3SA&ab_channel=SonicCity%7CSonicNews%2CMedia%26Community) and re-implement games in pixi.js.
 
-```sh
-npm install
-```
+Plan atm is:
 
-### Start Dev Server
-
-```sh
-npm start
-```
-
-### Build Prod Version
-
-```sh
-npm run build
-```
-
-### Features:
-
-- ES6 Support via [babel](https://babeljs.io/) (v7)
-- JavaScript Linting via [eslint](https://eslint.org/)
-- SASS Support via [sass-loader](https://github.com/jtangelder/sass-loader)
-- Autoprefixing of browserspecific CSS rules via [postcss](https://postcss.org/) and [postcss-preset-env](https://github.com/csstools/postcss-preset-env)
-- Style Linting via [stylelint](https://stylelint.io/)
-
-When you run `npm run build` we use the [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) to move the css to a separate file. The css file gets included in the head of the `index.html`.
+1. Re-create a single game
+2. Make that playable on ghpages, test it
+3. Keep adding more games
+4. Wario-ware-style remixed mode, where games change in sequence 
+5. Maybe scoreboard
