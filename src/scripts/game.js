@@ -21,16 +21,11 @@ export function update() {
     state.score = 0;
     return;
   }
-  if (controlsState.left && state.amyPos >= 2) {
-    state.amyPos--;
-  }
-  if (controlsState.right && state.amyPos <= 3) {
-    state.amyPos++;
-  }
 
   // move the ball
   let changeScoreBy = 0;
   let hit = false;
+  // hands stay up for up to 3 frames
   state.amyHandsUp = constrain(controlsState.hands - 1, 0, 3);
   const { ballPos } = state;
 
@@ -68,6 +63,13 @@ export function update() {
   const ballIsRolling = state.ballVelocity.y !== 0;
 
   if (ballIsRolling) {
+    // only move after the game started
+    if (controlsState.left && state.amyPos >= 2) {
+      state.amyPos--;
+    }
+    if (controlsState.right && state.amyPos <= 3) {
+      state.amyPos++;
+    }
     const ballCrossingTheNetInTheMiddle = ballPos.x === 2 && ballPos.y === 2;
     const ballIsComingFromRouge = state.ballVelocity.y === 1;
 
