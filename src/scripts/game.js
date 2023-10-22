@@ -8,7 +8,7 @@ export const state = {
     x: 2, // 1,2,3
     y: 4, // 1-2-3-4
   },
-  ballVelocity: -1, // if the ball goes up or down
+  ballVelocity: 0, // if the ball goes up or down
   gameOver: false, // bool
   score: 0, // -3 ... 3
 };
@@ -28,37 +28,38 @@ export function update() {
     state.amyPos++;
   }
 
-  state.amyHandsUp = controlsState.hands;
   // move the ball
+  let score = 0;
   let hit = false;
+  state.amyHandsUp = constrain(controlsState.hands - 1, 0, 3);
   const { ballPos } = state;
-  // return;
+
   if (ballPos.y === 4) {
     // is with amy
 
     if (state.amyHandsUp && state.amyPos === ballPos.x) {
       hit = true;
     } else {
+      score = -1;
       /// missed. score down
-      state.score += 1;
-      // reset ball
-      state.ballPos = { x: 2, y: 4 };
     }
   } else if (ballPos.y === 1) {
     if (state.rougePos === ballPos.x) {
       hit = true;
     } else {
-      /// missed. score down
-      state.score -= 1;
-      // reset ball
-      state.ballPos = { x: 2, y: 4 };
+      score = 1;
     }
 
     // is with Rouge
   }
 
+  if (score !== 0 && state.ballVelocity !== 0) {
+    state.score += score;
+    state.ballPos = { x: 2, y: 4 };
+    state.ballVelocity = 0;
+  }
   if (hit) {
-    state.ballVelocity *= -1;
+    state.ballVelocity = state.ballVelocity ? (state.ballVelocity *= -1) : -1;
   }
   state.ballPos.y = constrain(state.ballPos.y + state.ballVelocity, 1, 4);
 
