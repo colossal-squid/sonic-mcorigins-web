@@ -5,7 +5,6 @@ export const controlsState = {
 };
 
 function _update(e, v) {
-  console.log(e.key);
   if (e.key === "ArrowLeft" || e.key === "A") {
     controlsState.left = v;
     controlsState.right = !v;
@@ -25,5 +24,5 @@ export function initControls() {
 export function clearControls() {
   controlsState.left = false;
   controlsState.right = false;
-  // controlsState.hands = false;
+  controlsState.hands = false;
 }
