@@ -1,3 +1,5 @@
+import { constrain } from "./util";
+
 export const controlsState = {
   left: false,
   right: false,
@@ -28,9 +30,3 @@ export function clearControls() {
   controlsState.hands = constrain(controlsState.hands - 1, 0, 2);
 }
 
-function constrain(num, min, max) {
-  if (num < min) return min;
-  if (num > max) return max;
-
-  return num;
-}

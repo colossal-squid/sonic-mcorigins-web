@@ -1,4 +1,5 @@
 import { controlsState } from "./controls";
+import { randomFrom, constrain } from "./util";
 
 export const state = {
   rougePos: 1, // 1 or 2
@@ -95,13 +96,3 @@ export function update() {
   }
 }
 
-function constrain(num, min, max) {
-  if (num < min) return min;
-  if (num > max) return max;
-  return num;
-}
-
-function randomFrom(arr) {
-  const itemIndex = Math.floor(Math.random() * arr.length);
-  return arr[itemIndex];
-}

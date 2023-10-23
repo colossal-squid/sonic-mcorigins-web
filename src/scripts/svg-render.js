@@ -1,4 +1,3 @@
-const FPS = 2;
 const Sprite = (id) => {
   const sprite = document.getElementById(id);
   return {
@@ -70,17 +69,6 @@ function updateHud(score) {
   }
 }
 
-function clearScreen() {
-  hideAllBalls();
-  hideAmy();
-  hideRouge();
-  Object.keys(SPRITE_TABLE.HUD).forEach((k) => SPRITE_TABLE.HUD[k].hide());
-}
-
-function hideAllBalls() {
-  Object.keys(SPRITE_TABLE.BALLS).forEach((k) => SPRITE_TABLE.BALLS[k].hide());
-}
-
 function drawBall({ x, y }) {
   hideAllBalls();
   const ball = SPRITE_TABLE.BALLS[`ball-${y}${x}`];
@@ -94,14 +82,25 @@ function hideAmy() {
   Object.keys(SPRITE_TABLE.AMY).forEach((s) => SPRITE_TABLE.AMY[s].hide());
 }
 
+function hideRouge() {
+  Object.keys(SPRITE_TABLE.ROUGE).forEach((s) => SPRITE_TABLE.ROUGE[s].hide());
+}
+
+function hideAllBalls() {
+  Object.keys(SPRITE_TABLE.BALLS).forEach((k) => SPRITE_TABLE.BALLS[k].hide());
+}
+
+function clearScreen() {
+  hideAllBalls();
+  hideAmy();
+  hideRouge();
+  Object.keys(SPRITE_TABLE.HUD).forEach((k) => SPRITE_TABLE.HUD[k].hide());
+}
+
 function drawAmy(pos, hands) {
   hideAmy();
   SPRITE_TABLE.AMY[`amy-${pos}`].show();
   hands && SPRITE_TABLE.AMY[`tennis-${pos}`].show();
-}
-
-function hideRouge() {
-  Object.keys(SPRITE_TABLE.ROUGE).forEach((s) => SPRITE_TABLE.ROUGE[s].hide());
 }
 
 function drawRouge(pos) {
@@ -110,7 +109,6 @@ function drawRouge(pos) {
 }
 
 export function render(state) {
-  let visible = 0;
   clearScreen();
   drawBall(state.ballPos);
   drawAmy(state.amyPos, state.amyHandsUp);
