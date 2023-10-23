@@ -1,4 +1,5 @@
 import { controlsState } from "./controls";
+import { sounds } from "./sound";
 import { randomFrom, constrain } from "./util";
 
 export const state = {
@@ -15,17 +16,17 @@ export const state = {
 };
 
 export function update() {
-  // controls
-
   if (state.score <= -3 || state.score >= 3) {
-    // state.gameOver = true;
+    state.gameOver = true;
     state.score = 0;
+    sounds.gameOver.play();
     return;
   }
 
   // move the ball
   let changeScoreBy = 0;
   let hit = false;
+
   // hands stay up for up to 3 frames
   state.amyHandsUp = constrain(controlsState.hands - 1, 0, 3);
   const { ballPos } = state;
@@ -39,7 +40,8 @@ export function update() {
       state.amyHandsUp = 1;
     } else {
       changeScoreBy = -1;
-      /// missed. score downd
+      // sounds.miss.play();
+      /// missed. score down
     }
   } else if (ballPos.y === 1) {
     // is with Rouge
@@ -56,6 +58,7 @@ export function update() {
   }
 
   if (hit) {
+    sounds.hit.play();
     state.ballVelocity.y = state.ballVelocity.y
       ? (state.ballVelocity.y *= -1)
       : -1;
@@ -85,6 +88,11 @@ export function update() {
       state.amyPos = 2;
       state.ballVelocity.x = 0;
       state.ballVelocity.y = 0;
+      if (changeScoreBy > 0 ) {
+         sounds.score.play();
+      } else {
+        sounds.miss.play();
+      }
     }
 
     state.ballPos.y = constrain(state.ballPos.y + state.ballVelocity.y, 1, 4);
