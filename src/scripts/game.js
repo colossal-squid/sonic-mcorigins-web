@@ -13,7 +13,7 @@ export const state = {
   ballVelocity: { y: 0, x: 0 }, // if the ball goes up or down
   gameOver: false, // bool
   score: 0, // -3 ... 3
-  gameDifficulty: 1 // odds of Rouge deflecting the ball. 1 - 100%
+  gameDifficulty: 0.7 // odds of Rouge deflecting the ball. 1 - 100%
 };
 
 export function update() {
@@ -77,6 +77,7 @@ export function update() {
     if (controlsState.right && state.amyPos <= 3) {
       state.amyPos++;
     }
+    state.amyPos = constrain(state.amyPos, 1, 3);
     const ballCrossingTheNetInTheMiddle = ballPos.x === 2 && ballPos.y === 2;
     const ballIsComingFromRouge = state.ballVelocity.y === 1;
 
