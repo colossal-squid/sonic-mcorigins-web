@@ -12,3 +12,11 @@ Plan atm is:
 4. Wario-ware-style remixed mode, where games change in sequence 
 5. Maybe scoreboard
 
+Playable amy and rouge volleyball: [https://colossal-squid.github.io/sonic-mcorigins-web/](https://colossal-squid.github.io/sonic-mcorigins-web/)
+
+## Building for gh-pages 
+
+1. Checkout `gh-pages` branch.
+2. Merge latest main into it
+3. run `npm run build`
+4. Commit the new `docs/` folder and push.
