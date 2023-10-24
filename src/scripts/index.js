@@ -1,20 +1,14 @@
 import "../styles/index.scss";
-import * as PIXI from "pixi.js";
 import { init, render } from "./svg-render";
 import { state, update } from "./game";
 import { initControls, clearControls } from "./controls";
 
-// Create a PixiJS application of type cavas with specify background color and make it resizes to the iframe window
-const app = new PIXI.Application({
-  background: "#1099bb",
-  width: 561,
-  height: 719,
-});
-
-let sprite = PIXI.Sprite.from("assets/arvolleyball/arvolleyball_bg_crop.jpg");
-sprite.width = 561;
-sprite.height = 719;
-app.stage.addChild(sprite);
+async function createImage(src, className) {
+  const img = document.createElement("img");
+  img.className = className;;
+  img.src = src;
+  return img;
+}
 
 async function createSvgImage() {
   const svg = document.createElement("svg");
@@ -27,10 +21,11 @@ async function createSvgImage() {
   return svg;
 }
 
-// Adding the application's view to the DOM
-document.body.appendChild(app.view);
+
 const FPS = 2;
 async function run() {
+  document.body.appendChild(await createImage("assets/arvolleyball/arvolleyball_front.jpg", "lcd-game"));
+  document.body.appendChild(await createImage("assets/arvolleyball/arvolleyball_bg.jpg", "lcd-background"));
   document.body.appendChild(await createSvgImage());
   init();
   initControls();

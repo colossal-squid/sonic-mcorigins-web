@@ -15,9 +15,27 @@ canvas {
   margin: auto;
 }
 
+.lcd-game {
+  object-fit: cover;
+  object-position: center;
+  width: 100vw;
+  height: 100vw;
+}
+
+.lcd-background,
 .lcd-screen {
   position: absolute;
   left: calc(50% - 280px);
+  width: 561px;
+  height: 718px;
+}
+
+.lcd-background {
+  z-index: 1;
+}
+
+.lcd-screen {
+  z-index: 2;
 }
 
 .info {
