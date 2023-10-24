@@ -8,7 +8,7 @@ module.exports = {
     app: Path.resolve(__dirname, '../src/scripts/index.js'),
   },
   output: {
-    path: Path.join(__dirname, '../build'),
+    path: Path.join(__dirname, '../docs'),
     filename: 'js/[name].js',
   },
   optimization: {
@@ -20,7 +20,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{ from: Path.resolve(__dirname, '../public'), to: 'public' }],
+      patterns: [
+        { from: Path.resolve(__dirname, '../public'), to: '' }],
     }),
     new HtmlWebpackPlugin({
       template: Path.resolve(__dirname, '../src/index.html'),
