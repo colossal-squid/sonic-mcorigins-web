@@ -105,7 +105,11 @@ function drawAmy(pos, hands) {
 
 function drawRouge(pos) {
   hideRouge();
-  SPRITE_TABLE.ROUGE[`rouge-${pos}`].show();
+  if (pos < 3) {
+    SPRITE_TABLE.ROUGE[`rouge-${pos}`].show();
+  } else {
+    SPRITE_TABLE.ROUGE[`rouge-2`].show();
+  }
 }
 
 export function render(state) {

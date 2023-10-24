@@ -19,3 +19,13 @@ canvas {
   position: absolute;
   left: calc(50% - 280px);
 }
+
+.info {
+  background: rgb(33, 33, 33);
+  color: white;
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  padding: 1em;
+  border-radius: 30%;
+}

@@ -13,6 +13,7 @@ export const state = {
   ballVelocity: { y: 0, x: 0 }, // if the ball goes up or down
   gameOver: false, // bool
   score: 0, // -3 ... 3
+  gameDifficulty: 1 // odds of Rouge deflecting the ball. 1 - 100%
 };
 
 export function update() {
@@ -33,18 +34,20 @@ export function update() {
 
   if (ballPos.y === 4) {
     // is with amy
-
     if (state.amyHandsUp && state.amyPos === ballPos.x) {
       hit = true;
       state.ballVelocity.x = randomFrom([-1, 0, 1]);
       state.amyHandsUp = 1;
     } else {
       changeScoreBy = -1;
-      // sounds.miss.play();
       /// missed. score down
     }
   } else if (ballPos.y === 1) {
     // is with Rouge
+    const willRougeDeflect = state.gameDifficulty === 1 ? true : Math.random() > state.gameDifficulty; // better in-between difficulty scaling
+    if (willRougeDeflect) {
+      state.rougePos = ballPos.x;
+    }
     if (state.rougePos === ballPos.x) {
       hit = true;
       if (state.rougePos === 1) {
