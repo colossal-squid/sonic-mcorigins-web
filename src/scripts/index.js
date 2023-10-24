@@ -37,3 +37,5 @@ async function run() {
 }
 
 run();
+
+console.log(`Hello!`);
