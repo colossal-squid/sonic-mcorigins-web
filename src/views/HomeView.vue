@@ -10,12 +10,23 @@
           <img class="game-preview" src="/arvolleyball/arvolleyball_front.jpg" alt="Amy and Rouge volleyball" />
           Amy and Rouge volleyball
         </RouterLink>
+        
+        <RouterLink class="link" to="/artennis">
+          <img class="game-preview" src="/artennis/artennis_front.jpg" alt="Amy and Rouge tennis" />
+          Amy and Rouge tennis
+        </RouterLink>
       </nav>
     </header>
   </main>
 </template>
 
-<style>
+<style scoped>
+main {
+  padding: 2em;
+}
+nav {
+display: flex;
+}
 .link {
   display: flex;
   flex-direction: column;
