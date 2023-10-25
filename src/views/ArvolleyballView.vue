@@ -1,7 +1,18 @@
-$body-color: slateblue;
-
+<template>
+<div class="wrapper" ref="element">
+</div>
+</template>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { run } from '../arvolleyball'
+const element = ref();
+onMounted(() => {
+  run(element.value);
+})
+</script>
+<style>
 body {
-  color: $body-color;
+  color: slateblue;
   font-family: sans-serif;
   padding: 0;
   margin: 0;
@@ -11,11 +22,12 @@ body {
   width: 100vw;
   overflow: hidden;
   background: #333;
-
 }
-
-canvas {
-  margin: auto;
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .lcd-game {
@@ -51,3 +63,5 @@ canvas {
   padding: 1em;
   border-radius: 30%;
 }
+
+</style>

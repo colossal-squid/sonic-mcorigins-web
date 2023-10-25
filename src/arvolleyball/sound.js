@@ -1,6 +1,6 @@
 import { Howl } from 'howler';
 
-const BASE_PATH = 'assets/arvolleyball/';
+const BASE_PATH = 'arvolleyball/';
 
 function howl(path) {
     return new Howl({

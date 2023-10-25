@@ -1,4 +1,3 @@
-import "../styles/index.scss";
 import { init, render } from "./svg-render";
 import { state, update } from "./game";
 import { initControls, clearControls } from "./controls";
@@ -13,7 +12,7 @@ async function createImage(src, className) {
 async function createSvgImage() {
   const svg = document.createElement("svg");
   svg.className = "lcd-screen";
-  svg.innerHTML = await fetch("assets/arvolleyball/arvolleyball.svg")
+  svg.innerHTML = await fetch("arvolleyball/arvolleyball.svg")
     .then((res) => res.text())
     .then((text) => {
       return text;
@@ -23,10 +22,10 @@ async function createSvgImage() {
 
 
 const FPS = 2;
-async function run() {
-  document.body.appendChild(await createImage("assets/arvolleyball/arvolleyball_front.jpg", "lcd-game"));
-  document.body.appendChild(await createImage("assets/arvolleyball/arvolleyball_bg.jpg", "lcd-background"));
-  document.body.appendChild(await createSvgImage());
+export async function run(rootElement) {
+  rootElement.appendChild(await createImage("arvolleyball/arvolleyball_front.jpg", "lcd-game"));
+  rootElement.appendChild(await createImage("arvolleyball/arvolleyball_bg.jpg", "lcd-background"));
+  rootElement.appendChild(await createSvgImage());
   init();
   initControls();
   setInterval(() => {
@@ -37,5 +36,3 @@ async function run() {
 }
 
 run();
-
-console.log(`Hello!`);
