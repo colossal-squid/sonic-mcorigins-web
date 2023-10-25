@@ -1,14 +1,46 @@
-# sonic-mcorigins-web
+# vue-project
 
-Inspired by [https://github.com/Difegue/LCDonald](https://github.com/Difegue/LCDonald) this repo is an attempt to re-create some of LCD games playable in browser.
+This template should help get you started developing with Vue 3 in Vite.
 
-The idea is to re-use resources from glorious [Sonic McOrigins Plus](https://www.youtube.com/watch?v=qde4EjUn3SA&ab_channel=SonicCity%7CSonicNews%2CMedia%26Community) and re-implement games in pixi.js.
+## Recommended IDE Setup
 
-Plan atm is:
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-1. Re-create a single game
-2. Make that playable on ghpages, test it
-3. Keep adding more games
-4. Wario-ware-style remixed mode, where games change in sequence 
-5. Maybe scoreboard
+## Type Support for `.vue` Imports in TS
 
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
