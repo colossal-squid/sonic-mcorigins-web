@@ -10,7 +10,14 @@
       run(element.value);
     })
     </script>
-    <style>
-
+    <style lang="scss">
+    .wrapper {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        * {
+            margin: auto;
+        }
+    }
     </style>
     
