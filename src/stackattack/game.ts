@@ -17,6 +17,7 @@ export type GameState = {
         h: number;
     }
     boxes: Box[];
+    boxesToRemove: Box[];
     frames: number
 }
 
@@ -24,6 +25,7 @@ const state: GameState = {
     controls: controlsState,
     playerPosition: { x: 50, y: GROUND_Y, w: 8, h: 16 },
     boxes: [],
+    boxesToRemove: [],
     frames: 0
 }
 
@@ -59,12 +61,20 @@ initControls();
 
 createBox(30, GROUND_Y)
 setInterval(() => {
-    createBox(BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8), 7)
-}, 3000)
+    let x = BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8);
+    if (x % 8 !== 0) {
+        x -= x % 8 
+    }
+    createBox(x, 7)
+}, 1200)
 
 export function update(dt: number): GameState {
     state.frames += dt;
     let playerVelocity = 0;
+    // only lives 1 frame
+    if (state.boxesToRemove.length) {
+        state.boxesToRemove = [];
+    }
     // walk
     if (state.controls.left) {
         playerVelocity = -PLAYER_WALK_SPEED;
@@ -138,6 +148,10 @@ export function update(dt: number): GameState {
     })
 
     // check if player managed to assemble a line of boxes
-    // state.boxes.find()
+    const line = state.boxes.filter(b => b.y === GROUND_Y);
+    if (line.length === 12) {
+        state.boxesToRemove = [...line]
+        state.boxes = state.boxes.filter(b => !line.includes(b))
+    }
     return { ...state };
 }

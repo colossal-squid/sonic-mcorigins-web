@@ -97,5 +97,13 @@ export function paint(delta: number, state: GameState) {
         }
         boxSprite.position.set(box.x, box.y)
     })
+    // remove line
+    state.boxesToRemove.forEach(box => {
+        const boxSprite = boxSprites.find(sprite => sprite.name === box.id.toString());
+        if (boxSprite)
+        app.stage.removeChild(boxSprite)
+    })
+    // filter sprites 
+    boxSprites = boxSprites.filter(spr => !state.boxesToRemove.find(b => b.id === spr.name))
 
 }
