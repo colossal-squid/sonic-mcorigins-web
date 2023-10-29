@@ -1,37 +1,55 @@
 import * as PIXI from 'pixi.js';
 import type { GameState } from './game';
 
-const WIDTH = 900, HEIGHT = 720;
+const WIDTH = 128, HEIGHT = 64;
 
 let player: PIXI.Sprite | undefined = undefined;
 
-function createSprite(path: string): PIXI.Sprite {
-    const background = PIXI.Sprite.from(path);
-    background.anchor.set(0.5)
-    return background;
+async function loadSpritesheet(): Promise<PIXI.Spritesheet> {
+    const { data } = await PIXI.Assets.load('/stackattack/spritesheet.json');
+    const baseTexture = await PIXI.BaseTexture.from('/stackattack/tiles.png');
+    const spritesheet = new PIXI.Spritesheet(baseTexture, data);
+    // Generate all the Textures asynchronously
+    await spritesheet.parse();
+    return spritesheet;
 }
 
-function createBackground(): PIXI.DisplayObject {
-    const background = createSprite('../stackattack/background.png');
-    background.width = WIDTH;
-    background.height = HEIGHT;
-    background.position.set(WIDTH / 2, HEIGHT / 2);
-    return background as PIXI.DisplayObject;
+function createBackground(spritesheet: PIXI.Spritesheet): PIXI.DisplayObject {
+    const container = new PIXI.Sprite();
+    // wall on the left
+    for (let y = 0; y < 8; y++) {
+        const tile = PIXI.Sprite.from(spritesheet.textures[1]);
+        tile.anchor.set(0)
+        tile.position.set(0, y * 8)
+        container.addChild(tile);
+    }
+    // top
+    for (let x=0; x < 16; x++) {
+        const tile = PIXI.Sprite.from(spritesheet.textures[18]);
+        tile.anchor.set(0)
+        tile.position.set(x * 8, 0)
+        container.addChild(tile);
+    }
+    // top
+    for (let x=0; x < 16; x++) {
+        const tile = PIXI.Sprite.from(spritesheet.textures[33]);
+        tile.anchor.set(0)
+        tile.position.set(x * 8, HEIGHT - 8)
+        container.addChild(tile);
+    }
+    return container;
 }
 
-export function createPixiApp(el: Element):PIXI.Application {
-    const app = new PIXI.Application({ 
-        background: '#1099bb',
+export async function createPixiApp(el: Element): Promise<PIXI.Application> {
+    const app = new PIXI.Application({
+        background: '#000',
         width: WIDTH,
         height: HEIGHT,
         // resizeTo: window 
     });
-    
-    player = createSprite('../stackattack/guy.png');
-    player.position.set(WIDTH /2, HEIGHT * 0.6);
-    player.scale.set(0.5)
-    app.stage.addChild(createBackground())
-    app.stage.addChild(player)
+    const spritesheet = await loadSpritesheet();
+    const bg = createBackground(spritesheet);
+    app.stage.addChild(bg)
     el.appendChild(app.view as unknown as Element);
     return app;
 }

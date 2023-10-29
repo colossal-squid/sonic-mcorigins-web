@@ -17,6 +17,7 @@
         overflow: hidden;
         * {
             margin: auto;
+            transform: scale(5)
         }
     }
     </style>
