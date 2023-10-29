@@ -84,11 +84,13 @@ export async function createPixiApp(el: Element): Promise<PIXI.Application> {
 export function paint(delta: number, state: GameState) {
     player.position.x = state.playerPosition.x;
     player.position.y = state.playerPosition.y;
-    debugText.text = JSON.stringify({x :Math.trunc(state.playerPosition.x),  y :Math.trunc(state.playerPosition.y), })
+    debugText.text = Math.trunc(state.frames)
     state.boxes.forEach(box => {
         let boxSprite = boxSprites.find(sprite => sprite.name === box.id.toString());
         if (!boxSprite) {
-            boxSprite = PIXI.Sprite.from(spritesheet.textures[16]);
+            const BOX_SPRITES = [16, 32, 48, 64, 80, 96]
+            const RANDOM_BOX_SPRITE = BOX_SPRITES[Math.trunc(Math.random() * BOX_SPRITES.length)]
+            boxSprite = PIXI.Sprite.from(spritesheet.textures[RANDOM_BOX_SPRITE]);
             boxSprite.name = box.id.toString()
             boxSprites.push(boxSprite);
             app.stage.addChild(boxSprite)

@@ -1,8 +1,8 @@
 import { GROUND_Y, PLAYER_WALK_SPEED, GRAVITY, JUMP_SPEED } from "./constants";
 import { type ControlsState, controlsState, initControls } from "./controls"
 
-const BOUNDS_X = { MIN: 8, MAX: 92 }
-type Rectangle = { x: number, y: number, w: number, h: number }
+const BOUNDS_X = { MIN: 8, MAX: 88 }
+type Rectangle = { x: number, y: number, w: number, h: number, id?: number }
 let boxCount = 0;
 type Box = Rectangle & {
     id: number;
@@ -17,12 +17,14 @@ export type GameState = {
         h: number;
     }
     boxes: Box[];
+    frames: number
 }
 
 const state: GameState = {
     controls: controlsState,
     playerPosition: { x: 50, y: GROUND_Y, w: 8, h: 16 },
-    boxes: []
+    boxes: [],
+    frames: 0
 }
 
 function createBox(x: number, y: number): void {
@@ -40,14 +42,15 @@ function rectCollide(r1: Rectangle, r2: Rectangle) {
     return false;
 }
 
-function isStanding({ x, y, h, w }: Rectangle): boolean {
+function isStanding(obj: Rectangle): boolean {
     // todo: implement standing on boxes
-    if (y === GROUND_Y) {
+    if (obj.y === GROUND_Y) {
         return true;
     } else {
-        const standingOnBox = state.boxes.find(b =>
-            rectCollide(b, { x, y, h, w }) && y < b.y
-        )
+        const standingOnBox = state.boxes.filter(b => b !== obj && b.id !== obj['id'])
+            .find(b =>
+                rectCollide(b, obj) && obj.y < b.y
+            )
         return !!standingOnBox;
     }
 }
@@ -55,9 +58,12 @@ function isStanding({ x, y, h, w }: Rectangle): boolean {
 initControls();
 
 createBox(30, GROUND_Y)
-createBox(80, GROUND_Y)
+setInterval(() => {
+    createBox(BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8), 7)
+}, 3000)
 
 export function update(dt: number): GameState {
+    state.frames += dt;
     let playerVelocity = 0;
     // walk
     if (state.controls.left) {
@@ -75,13 +81,27 @@ export function update(dt: number): GameState {
             state.playerPosition.y -= JUMP_SPEED;
         }
     }
-    // apply gravity 
+    // apply gravity to player
     if (!isPlayerOnAGround) {
         state.playerPosition.y += GRAVITY;
         if (state.playerPosition.y > GROUND_Y) {
             state.playerPosition.y = GROUND_Y;
         }
     }
+    // apply gravity to boxes
+    const boxesInTheAir = state.boxes.filter(b => !isStanding(b));
+    boxesInTheAir.forEach(b => {
+        b.y += GRAVITY;
+        if (b.y > GROUND_Y) {
+            b.y = GROUND_Y;
+            if (b.x % 8 < 4) {
+                b.x = Math.trunc(b.x / 8) * 8
+            } else {
+                b.x = Math.round(b.x / 8) * 8
+            }
+        }
+    })
+
     // bounds
     if (state.playerPosition.x < BOUNDS_X.MIN) {
         state.playerPosition.x = BOUNDS_X.MIN
@@ -96,7 +116,7 @@ export function update(dt: number): GameState {
         const r1 = box;
         const r2 = state.playerPosition;
         if (rectCollide(r1, r2)) {
-            if (r1.y === r2.y) { // if on the same height
+            if (Math.abs(r1.y - r2.y) < 8) { // if the height is approx equal
                 // player defo aint moving now
                 state.playerPosition.x -= playerVelocity;
                 // find if the box collides with any other box on the same height
@@ -116,5 +136,8 @@ export function update(dt: number): GameState {
             box.x = BOUNDS_X.MAX
         }
     })
+
+    // check if player managed to assemble a line of boxes
+    // state.boxes.find()
     return { ...state };
 }
