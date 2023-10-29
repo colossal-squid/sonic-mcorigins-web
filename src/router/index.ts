@@ -12,18 +12,17 @@ const router = createRouter({
     {
       path: '/arvolleyball',
       name: 'Arvolleyball',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/ArvolleyballView.vue')
     },
     {
       path: '/artennis',
       name: 'Artennis',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/ArtennisView.vue')
+    },
+    {
+      path: '/stackattack',
+      name: 'Stackattack',
+      component: () => import('../views/Stackattack.vue')
     }
   ]
 })
