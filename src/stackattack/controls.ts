@@ -1,10 +1,10 @@
 export type ControlsState = {
-    left: boolean, right: boolean, up: boolean;
+    left: boolean, right: boolean, jump: boolean;
 }
 export const controlsState: ControlsState = {
   left: false,
   right: false,
-  up: false
+  jump: false
 };
 
 export function initControls() {
@@ -16,6 +16,9 @@ export function initControls() {
       if (e.key === "ArrowRight" || e.key === "D") {
         controlsState.left = false;
         controlsState.right = true;
+      }
+      if (e.key === "ArrowUp" || e.key === "W") {
+        controlsState.jump = true;
       }
   });
 

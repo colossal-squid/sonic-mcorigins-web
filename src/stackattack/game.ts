@@ -1,12 +1,10 @@
-import { GROUND_Y, PLAYER_WALK_SPEED } from "./constants";
+import { GROUND_Y, PLAYER_WALK_SPEED, GRAVITY, JUMP_SPEED } from "./constants";
 import { type ControlsState, controlsState, initControls } from "./controls"
 
 const BOUNDS_X = { MIN: 8, MAX: 92 }
 type Rectangle = { x: number, y: number, w: number, h: number }
 let boxCount = 0;
-type Box = {
-    x: number;
-    y: number;
+type Box = Rectangle & {
     id: number;
 }
 
@@ -15,18 +13,20 @@ export type GameState = {
     playerPosition: {
         x: number;
         y: number;
+        w: number;
+        h: number;
     }
     boxes: Box[];
 }
 
 const state: GameState = {
     controls: controlsState,
-    playerPosition: { x: 50, y: GROUND_Y },
+    playerPosition: { x: 50, y: GROUND_Y, w: 8, h: 16 },
     boxes: []
 }
 
 function createBox(x: number, y: number): void {
-    state.boxes.push({ id: boxCount++, x, y })
+    state.boxes.push({ id: boxCount++, x, y, w: 8, h: 8 })
 }
 
 // https://www.jeffreythompson.org/collision-detection/rect-rect.php
@@ -38,6 +38,18 @@ function rectCollide(r1: Rectangle, r2: Rectangle) {
         return true;
     }
     return false;
+}
+
+function isStanding({ x, y, h, w }: Rectangle): boolean {
+    // todo: implement standing on boxes
+    if (y === GROUND_Y) {
+        return true;
+    } else {
+        const standingOnBox = state.boxes.find(b =>
+            rectCollide(b, { x, y, h, w }) && y < b.y
+        )
+        return !!standingOnBox;
+    }
 }
 
 initControls();
@@ -55,6 +67,21 @@ export function update(dt: number): GameState {
         playerVelocity = PLAYER_WALK_SPEED;
     }
 
+    // jump
+    const isPlayerOnAGround = isStanding(state.playerPosition);
+    if (state.controls.jump) {
+        state.controls.jump = false;
+        if (isPlayerOnAGround) {
+            state.playerPosition.y -= JUMP_SPEED;
+        }
+    }
+    // apply gravity 
+    if (!isPlayerOnAGround) {
+        state.playerPosition.y += GRAVITY;
+        if (state.playerPosition.y > GROUND_Y) {
+            state.playerPosition.y = GROUND_Y;
+        }
+    }
     // bounds
     if (state.playerPosition.x < BOUNDS_X.MIN) {
         state.playerPosition.x = BOUNDS_X.MIN
@@ -66,12 +93,20 @@ export function update(dt: number): GameState {
 
     // check for collisions
     state.boxes.forEach(box => {
-        const r1 = {...box, w: 8, h: 8};
-        const r2 = { x: state.playerPosition.x, y: state.playerPosition.y, w: 8, h: 16}
+        const r1 = box;
+        const r2 = state.playerPosition;
         if (rectCollide(r1, r2)) {
             if (r1.y === r2.y) { // if on the same height
-                box.x += playerVelocity;
+                // player defo aint moving now
                 state.playerPosition.x -= playerVelocity;
+                // find if the box collides with any other box on the same height
+                const otherBoxes = state.boxes
+                    .filter(b => b.id !== box.id)
+                    .filter(b => b.y === r1.y)
+                    .filter(b => rectCollide(r1, b))
+                if (otherBoxes.length === 0) {
+                    box.x += playerVelocity;
+                }
             }
         }
         // box bounds

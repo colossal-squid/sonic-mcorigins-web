@@ -6,7 +6,7 @@ let app!: PIXI.Application;
 let player!: PIXI.Sprite;
 let boxSprites: PIXI.Sprite[] = [];
 let spritesheet!: PIXI.Spritesheet;
-
+let debugText!: PIXI.Text;
 
 async function loadSpritesheet(): Promise<PIXI.Spritesheet> {
     const { data } = await PIXI.Assets.load('/stackattack/spritesheet.json');
@@ -68,8 +68,15 @@ export async function createPixiApp(el: Element): Promise<PIXI.Application> {
     spritesheet = await loadSpritesheet();
     const bg = createBackground();
     player = createPlayer()
+    debugText = new PIXI.Text('', {
+        fontFamily: 'Arial',
+        fontSize: 12,
+        fill: 0xff1010,
+        align: 'center',
+    });
     app.stage.addChild(bg)
     app.stage.addChild(player)
+    // app.stage.addChild(debugText)
     el.appendChild(app.view as unknown as Element);
     return app;
 }
@@ -77,6 +84,7 @@ export async function createPixiApp(el: Element): Promise<PIXI.Application> {
 export function paint(delta: number, state: GameState) {
     player.position.x = state.playerPosition.x;
     player.position.y = state.playerPosition.y;
+    debugText.text = JSON.stringify({x :Math.trunc(state.playerPosition.x),  y :Math.trunc(state.playerPosition.y), })
     state.boxes.forEach(box => {
         let boxSprite = boxSprites.find(sprite => sprite.name === box.id.toString());
         if (!boxSprite) {
