@@ -2,6 +2,9 @@ import * as PIXI from 'pixi.js';
 import type { GameState } from './game';
 import { GROUND_Y, HEIGHT, WIDTH } from './constants';
 
+// disable AA
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 let app!: PIXI.Application;
 let player!: PIXI.Sprite;
 let boxSprites: PIXI.Sprite[] = [];
