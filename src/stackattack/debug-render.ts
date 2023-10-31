@@ -34,7 +34,7 @@ export function paint(delta: number, state: GameState) {
     graphics.endFill();
 
     // draw boxes 
-    graphics.beginFill(0x330000);
+    graphics.beginFill(0x000080);
     state.boxes.forEach(({ x, y, w, h }) => {
         graphics.drawRect(x - w, y - h, w, h)
     })

@@ -6,6 +6,10 @@ type Rectangle = { x: number, y: number, w: number, h: number, id?: number }
 let boxCount = 0;
 type Box = Rectangle & {
     id: number;
+    isStanding?: {
+        box: Box,
+        standing: boolean
+    }
 }
 
 export type GameState = {
@@ -42,22 +46,21 @@ function createBox(x: number, y: number): void {
 function rectCollide(r1: Rectangle, r2: Rectangle) {
     if (r1.x + r1.w > r2.x &&     // r1 right edge past r2 left
         r1.x < r2.x + r2.w &&       // r1 left edge past r2 right
-        r1.y + r1.h > r2.y &&       // r1 top edge past r2 bottom
-        r1.y < r2.y + r2.h) {       // r1 bottom edge past r2 top
+        r1.y + r1.h >= r2.y &&       // r1 top edge past r2 bottom
+        r1.y <= r2.y + r2.h) {       // r1 bottom edge past r2 top
         return true;
     }
     return false;
 }
 
 function isStanding(obj: Rectangle): { standing: boolean, box?: Box } {
-    // todo: implement standing on boxes
     if (obj.y === GROUND_Y) {
         return { standing: true, box: undefined };
     } else {
         const standingOnBox = state.boxes
-            .filter(b => b !== obj && b.id !== obj['id'])
+            .filter(b => b.id !== obj['id'])
             .find(b =>
-                rectCollide(b, obj) && obj.y < b.y
+                rectCollide(b, obj) && obj.y <= b.y
             )
         return { standing: !!standingOnBox, box: standingOnBox };
     }
@@ -65,10 +68,12 @@ function isStanding(obj: Rectangle): { standing: boolean, box?: Box } {
 
 initControls();
 
+createBox(24, GROUND_Y)
 createBox(32, GROUND_Y)
-createBox(80, GROUND_Y)
-createBox(64, GROUND_Y)
-// createBox(40, GROUND_Y - 32)
+createBox(32, GROUND_Y - 8)
+createBox(32, GROUND_Y - 16)
+createBox(40, GROUND_Y)
+
 setInterval(() => {
     let x = BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8);
     if (x % 8 !== 0) {
@@ -94,7 +99,8 @@ export function update(dt: number): GameState {
     }
 
     // jump
-    const { standing, box } = isStanding(state.playerPosition);
+    const isPlayerStanding = isStanding(state.playerPosition);
+    const { standing, box } = isPlayerStanding;
 
     if (state.controls.jump) {
         if (standing) {
@@ -139,7 +145,6 @@ export function update(dt: number): GameState {
         // it's possible to push a box into a box
         // if we decided a box is "standing" on box - should have respective y
         if (b.isStanding.box && b.y !== (b.isStanding.box.y - 8)) {
-            // this is too generous, gotta return to this
             b.y = b.isStanding.box.y - 8
         }
     })
@@ -152,29 +157,39 @@ export function update(dt: number): GameState {
     if (state.playerPosition.x > BOUNDS_X.MAX) {
         state.playerPosition.x = BOUNDS_X.MAX
     }
-
     state.playerPosition.x += playerVelocity;
 
-    // player moves boxes
+    // player collisions with boxes
+    const player = state.playerPosition;
     state.boxes.forEach(box => {
-        const r1 = box;
-        const r2 = state.playerPosition;
-        if (rectCollide(r1, r2)) {
-            if (r1.y  === r2.y) { // if the height is equal
+
+        if (rectCollide(box, player)) {
+
+            // standing on a box is fine, return
+            if (isPlayerStanding.box === box) {
+                return;
+            }
+            const isEqualHeight = box.y === player.y;
+            const canPushTheBox = (player.x < box.x && playerVelocity > 0 || player.x > box.x && playerVelocity < 0)
+            const nothingStandsOnBox = !state.boxes.find(b2 => isStanding(b2)?.box === box);
+            // if the height is equal
+            if (isEqualHeight && canPushTheBox && nothingStandsOnBox) {
                 // player defo aint moving now
                 state.playerPosition.x -= playerVelocity;
                 // find if the box collides with any other box on the same height
                 const otherBoxes = state.boxes
                     .filter(b => b.id !== box.id)
-                    .filter(b => b.y === r1.y)
-                    .filter(b => rectCollide(r1, b))
+                    .filter(b => b.y === box.y)
+                    .filter(b => rectCollide(box, b))
 
                 if (otherBoxes.length === 0) {
                     box.x += playerVelocity;
                 }
-            } else if (!isStanding(r1).standing) {
-                // box is in the air - stop player from moving inside of it
-                // player defo aint moving now
+            } else if (!isStanding(box).standing) {
+                // don't move boxes in the air
+                state.playerPosition.x -= playerVelocity;
+            } else if (isEqualHeight && !nothingStandsOnBox && canPushTheBox) {
+                // can't move a stack of two boxes
                 state.playerPosition.x -= playerVelocity;
             }
         }

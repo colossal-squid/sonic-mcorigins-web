@@ -62,7 +62,7 @@ function createPlayer(): PIXI.DisplayObject {
 
 export async function createPixiApp(el: Element): Promise<PIXI.Application> {
     app = new PIXI.Application({
-        background: '#000',
+        background: '#e08d22',
         width: WIDTH,
         height: HEIGHT,
         antialias: false,
@@ -99,6 +99,7 @@ export function paint(delta: number, state: GameState) {
             app.stage.addChild(boxSprite)
         }
         boxSprite.position.set(box.x, box.y)
+        boxSprite.tint = box.isStanding?.standing ? 0xFF0000 : 0xFFFFFF;
     })
     // remove line
     state.boxesToRemove.forEach(box => {
