@@ -15,6 +15,11 @@
           <img class="game-preview" src="/artennis/artennis_front.jpg" alt="Amy and Rouge tennis" />
           Amy and Rouge tennis
         </RouterLink>
+
+        <RouterLink class="link" to="/stackattack">
+          <img class="game-preview" src="/stackattack/siemens.png" alt="Stack attack" />
+          Stack attack
+        </RouterLink>
       </nav>
     </header>
   </main>
