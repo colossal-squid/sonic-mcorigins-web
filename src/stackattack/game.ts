@@ -32,7 +32,7 @@ const state: GameState = {
      * but with movement speed being a decimal number
      * I make him 7px wide so he can easier fall between boxes
      */
-    playerPosition: { x: 50, y: GROUND_Y, w: 7, h: 16 },
+    playerPosition: { x: 50, y: GROUND_Y - 16, w: 7, h: 16 },
     boxes: [],
     boxesToRemove: [],
     frames: 0
@@ -68,19 +68,28 @@ function isStanding(obj: Rectangle): { standing: boolean, box?: Box } {
 
 initControls();
 
+createBox(0, GROUND_Y)
+createBox(8, GROUND_Y)
+createBox(16, GROUND_Y)
 createBox(24, GROUND_Y)
 createBox(32, GROUND_Y)
-createBox(32, GROUND_Y - 8)
-createBox(32, GROUND_Y - 16)
 createBox(40, GROUND_Y)
+createBox(48, GROUND_Y)
+createBox(56, GROUND_Y)
+createBox(64, GROUND_Y)
 
-setInterval(() => {
-    let x = BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8);
-    if (x % 8 !== 0) {
-        x -= x % 8
-    }
-    createBox(x, 7)
-}, 2000)
+createBox(16, GROUND_Y - 16)
+// createBox(80, GROUND_Y)
+// createBox(88, GROUND_Y - 8)
+
+
+// setInterval(() => {
+//     let x = BOUNDS_X.MIN + (Math.random() * BOUNDS_X.MAX - 8);
+//     if (x % 8 !== 0) {
+//         x -= x % 8
+//     }
+//     createBox(x, 7)
+// }, 2000)
 
 export function update(dt: number): GameState {
     state.frames += dt;
@@ -193,6 +202,18 @@ export function update(dt: number): GameState {
                 state.playerPosition.x -= playerVelocity;
             }
         }
+
+        // player head collision
+        const playerHead = {...state.playerPosition, h: 8, w: 7, y: state.playerPosition.y - 8 }
+        if (rectCollide(box, playerHead)) {
+            if (box.y === playerHead.y) {
+                // can't push the box with his head
+                state.playerPosition.x -= playerVelocity;
+            } else if (box.y < playerHead.y && Math.abs(box.x - player.x) < 2) {
+                alert('game over')
+            }
+        }
+
         // box bounds
         if (box.x < BOUNDS_X.MIN) {
             box.x = BOUNDS_X.MIN
